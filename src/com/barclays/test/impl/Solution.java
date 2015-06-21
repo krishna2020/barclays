@@ -211,6 +211,7 @@ public class Solution {
 	public static void main(String[] args) {
 		Solution sol = new Solution();
 		sol.processBags(sol.initialize("resources/input.txt"));
+		System.out.println("Success");
 	}
 
 }
