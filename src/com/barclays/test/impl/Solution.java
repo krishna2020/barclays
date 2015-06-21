@@ -1,11 +1,7 @@
 package com.barclays.test.impl;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,7 +18,6 @@ public class Solution {
 	Map<String, Integer> nodes = new HashMap<String, Integer>();
 	Map<String, Integer> flights = new HashMap<String, Integer>();
 	Stack<String> nodePath = new Stack<String>();
-	//StringBuilder finalPath;
 	int dist;
 
 	public Graph initialize(String file) {
@@ -46,37 +41,29 @@ public class Solution {
 					}
 				} else {
 					if (conveyor) {
-						// System.out.println("In conveyor");
 						lines.add(line);
 						String[] cols = line.split(" ");
 						if (!nodes.containsKey(cols[0])) {
 							nodes.put(cols[0], j);
 							j++;
-							// System.out.println(j);
 						}
 						if (!nodes.containsKey(cols[1])) {
 							nodes.put(cols[1], j);
 							j++;
-							// System.out.println(j);
 						}
 					}
 
 					if (departures) {
-						// System.out.println("In departure");
 						String[] cols = line.split(" ");
 						flights.put(cols[0], nodes.get(cols[1]));
 					}
 
 					if (bags) {
-						// System.out.println("In bag");
 						bagInput.add(line);
 					}
 				}
 
 			}
-
-			//System.out.println("Nodes Length: " + nodes.size());
-			//printMap();
 
 			Graph graph = new Graph(nodes.size());
 			for (int i = 0; i < lines.size(); i++) {
@@ -85,22 +72,11 @@ public class Solution {
 						.parseInt(cols[2]));
 			}
 
-			//printMatrix(graph);
 			return graph;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	private void printMatrix(Graph graph) {
-		int[][] matrix = graph.adjMatrix;
-		for (int i = 0; i < nodes.size(); i++) {
-			for (int m = 0; m < nodes.size(); m++) {
-				System.out.print(matrix[i][m] + " ");
-			}
-			System.out.print("\n");
-		}
 	}
 
 	public void printMap() {
@@ -120,29 +96,21 @@ public class Solution {
 		List<Integer> visited = new ArrayList<Integer>();
 		List<Integer> marked = new ArrayList<Integer>();
 		
-		//finalPath = new StringBuilder();
-		//finalPath.append(" ");
-		//finalPath.append(getNode(j));
-		
-		//System.out.println(getNode(j));
 		while (true) {
 			int k = 0;
 			cntr = 1;
 			for (; k < nodes.size(); k++) {
 				if (!visited.contains(k)) {
 					if (graph.isEdge(k, j)) {
-						//System.out.println(getNode(k));
 						visited.add(j);
 						dist += graph.getDist(k, j);
 						nodePath.push(getNode(k));
-						//finalPath.append(" ");
-						//finalPath.append(getNode(k));
 						break;
 					}
 				}
 				cntr++;
 			}
-			// j = k;
+
 			if (k == i)
 				break;
 
@@ -154,23 +122,14 @@ public class Solution {
 				dist = 0;
 				nodePath.clear();
 				nodePath.push(getNode(j));
-				//finalPath = new StringBuilder();
-				//finalPath.append(getNode(j));
-				//finalPath.append(" ");
-				// visited.remove(Integer.valueOf(j));
-				//System.out.println("Alternate Path");
 
 			} else {
 				j = k;
 			}
-
 		}
-		
-		//System.out.println("Distance:" + dist);
 	}
 
 	public void processBags(Graph graph) {
-		//System.out.println("No of Inputs:" + bagInput.size());
 		for (int i = 0; i < bagInput.size(); i++) {
 			String[] cols = bagInput.get(i).split(" ");
 			Integer destination;
@@ -180,9 +139,6 @@ public class Solution {
 				destination = flights.get(cols[2]);
 			}
 
-			//System.out.println("---------------");
-			//System.out.println(cols[0]);
-			
 			StringBuilder finalPath = new StringBuilder();
 			finalPath.append(cols[0]);
 			findPath(nodes.get(cols[1]), destination, graph);
